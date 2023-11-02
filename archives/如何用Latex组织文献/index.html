@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7CLobster+Two:300,300italic,400,400italic,700,700italic%7CAmita:300,300italic,400,400italic,700,700italic%7CRoboto+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/orange/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yapwn.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="不管是否使用 \(\LaTeX\) 对文章的参考文献进行组织，对于一篇文章的参考文献都由两个最基本的部分组成：  参考文献在正文中引用（包括：引用的方式和样式）   参考文献在正文中引用   文章末尾参考文献列表的生成（包括：生成的方式和样式）   文章末尾参考文献列表的生成">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="如何用Latex组织文献?">
+<meta property="og:url" content="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E7%94%A8Latex%E7%BB%84%E7%BB%87%E6%96%87%E7%8C%AE/">
+<meta property="og:site_name" content="Meditations">
+<meta property="og:description" content="不管是否使用 \(\LaTeX\) 对文章的参考文献进行组织，对于一篇文章的参考文献都由两个最基本的部分组成：  参考文献在正文中引用（包括：引用的方式和样式）   参考文献在正文中引用   文章末尾参考文献列表的生成（包括：生成的方式和样式）   文章末尾参考文献列表的生成">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241301531.png">
+<meta property="og:image" content="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241302184.png">
+<meta property="article:published_time" content="2023-04-24T08:04:51.000Z">
+<meta property="article:modified_time" content="2023-11-02T14:16:02.443Z">
+<meta property="article:author" content="Borne">
+<meta property="article:tag" content="LaTeX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241301531.png">
+
+
+<link rel="canonical" href="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E7%94%A8Latex%E7%BB%84%E7%BB%87%E6%96%87%E7%8C%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E7%94%A8Latex%E7%BB%84%E7%BB%87%E6%96%87%E7%8C%AE/","path":"archives/如何用Latex组织文献/","title":"如何用Latex组织文献?"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何用Latex组织文献? | Meditations</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Meditations" type="application/atom+xml">
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Meditations</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Work Hard, Have Fun!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-rss"><a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a></li><li class="menu-item menu-item-commonweal"><a href="/404" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D%E6%9C%80%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%92%8C%E5%BC%95%E7%94%A8%E4%B8%8D%E6%8E%A8%E8%8D%90"><span class="nav-text">第一种：最基本的参考文献和引用（不推荐）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E4%BD%BF%E7%94%A8-mathrmbscriptstyleibtex-%E6%A0%BC%E5%BC%8F%E7%BB%84%E7%BB%87%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-text">第二种：使用 \(\mathrm{B\scriptstyle{IB}}\TeX\) 格式组织参考文献</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%A7%8D%E4%BD%BF%E7%94%A8-biblatex-%E5%AE%8F%E5%8C%85%E7%BB%84%E7%BB%87%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-text">第三种：使用 biblatex 宏包组织参考文献</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Borne"
+      src="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241255768.PNG">
+  <p class="site-author-name" itemprop="name">Borne</p>
+  <div class="site-description" itemprop="description">Sharing my Life, Work, Technique and Sentiment!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Yapwn" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Yapwn" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:Born.Yao@gmail.com" title="E-Mail → mailto:Born.Yao@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/jiang-yang-46-25" title="Zhihu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;jiang-yang-46-25" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://t.me/Yapoown" title="Telegram → https:&#x2F;&#x2F;t.me&#x2F;Yapoown" rel="noopener me" target="_blank"><i class="fa-brands fa-telegram fa-fw"></i>Telegram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E6%A0%87%E5%87%86%E8%89%B2%E7%89%88.png" title="WeChat → https:&#x2F;&#x2F;raw.githubusercontents.com&#x2F;Yapwn&#x2F;BlogDataBase&#x2F;master&#x2F;%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E6%A0%87%E5%87%86%E8%89%B2%E7%89%88.png" rel="noopener me" target="_blank"><i class="fa-brands fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/93744433" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;93744433" rel="noopener me" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E7%94%A8Latex%E7%BB%84%E7%BB%87%E6%96%87%E7%8C%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241255768.PNG">
+      <meta itemprop="name" content="Borne">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meditations">
+      <meta itemprop="description" content="Sharing my Life, Work, Technique and Sentiment!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何用Latex组织文献? | Meditations">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何用Latex组织文献?
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-24 16:04:51" itemprop="dateCreated datePublished" datetime="2023-04-24T16:04:51+08:00">2023-04-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-02 22:16:02" itemprop="dateModified" datetime="2023-11-02T22:16:02+08:00">2023-11-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>不管是否使用 <span class="math inline">\(\LaTeX\)</span> 对文章的参考文献进行组织，对于一篇文章的参考文献都由两个最基本的部分组成：</p>
+<ul>
+<li>参考文献在正文中引用（包括：引用的方式和样式）</li>
+</ul>
+<figure>
+<img data-src="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241301531.png" alt="参考文献在正文中引用"><figcaption aria-hidden="true">参考文献在正文中引用</figcaption>
+</figure>
+<ul>
+<li>文章末尾参考文献列表的生成（包括：生成的方式和样式）</li>
+</ul>
+<figure>
+<img data-src="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241302184.png" alt="文章末尾参考文献列表的生成"><figcaption aria-hidden="true">文章末尾参考文献列表的生成</figcaption>
+</figure>
+<span id="more"></span>
+<p>在下面即将要介绍的三种方法中，不管是哪一种方法，对于参考文献在正文中引用的方式都是相同的：</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\cite</span>{⟨citation⟩}</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li><p><code>⟨citation⟩</code> 为引用的参考文献的标签；</p></li>
+<li><p><code>\cite</code> 带一个可选参数，为引用的编号后加上额外的内容，如：<code>\cite[page 22]{Paper2013}</code>，可能得到形如 <code>[13, page 22]</code> 这样的引用；</p></li>
+</ul>
+<blockquote>
+<p>注意：下面对于三种方法的介绍中将不再提及参考文献在正文中的引用方式，重点介绍参考文献列表的生成方式，以及样式的设置。</p>
+</blockquote>
+<h1 id="第一种最基本的参考文献和引用不推荐">第一种：最基本的参考文献和引用（不推荐）</h1>
+<p>简单介绍一下使用 <span class="math inline">\(\LaTeX{}\)</span> 自带的参考文献组织方式生成参考文献列表</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>{thebibliography}{⟨widest label⟩}</span><br><span class="line"></span><br><span class="line"><span class="keyword">\bibitem</span>[⟨item number⟩]{⟨citation⟩} ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>{thebibliography}</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li><p><code>⟨citation⟩</code> 是 <code>\cite</code> 使用的文献标签；</p></li>
+<li><p><code>⟨item number⟩</code> 自定义参考文献的序号，如果省略， 则按自然排序给定序号；</p></li>
+<li><p><code>⟨widest label⟩</code> 用以限制参考文献序号的宽度，如：99 意味着不超过两位数字。通常设定为与参考文献的数目一致。</p></li>
+</ul>
+<h1 id="第二种使用-mathrmbscriptstyleibtex-格式组织参考文献">第二种：使用 <span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 格式组织参考文献</h1>
+<p><span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 格式的组织参考文献主要分成两个部分：</p>
+<ul>
+<li><span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 数据库：用来管理参考文献数据
+<ul>
+<li>数据文件以 <code>.bib</code> 作为扩展名，比如：<code>ref.bib</code>；</li>
+<li>通过 <code>\bibliography{}</code> 生成参考文献列表，比如：<code>\bibliography{ref}</code>，不包括扩展名；</li>
+</ul></li>
+<li><span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 样式：决定了参考文献的写法
+<ul>
+<li>样式文件以 <code>.bst</code> 为扩展名；</li>
+<li>通过 <code>\bibliographystyle{}</code> 设置样式，比如：<code>\bibliographystyle{plain}</code>，不包括扩展名；</li>
+</ul></li>
+</ul>
+<p>具体实践：</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>{article}</span><br><span class="line"><span class="comment">% 导言区</span></span><br><span class="line"><span class="keyword">\bibliographystyle</span>{plain} <span class="comment">% 设置 bibtex 样式</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>{document}</span><br><span class="line"><span class="comment">% 正文内容</span></span><br><span class="line"><span class="keyword">\section</span>{Some words}</span><br><span class="line">This is a example <span class="keyword">\cite</span>{citation1}.</span><br><span class="line">······</span><br><span class="line"></span><br><span class="line"><span class="comment">% 导入 bibtex 文献数据 ref.bib，按照 \bibliographystyle 设置的样式生成参考文献列表</span></span><br><span class="line"><span class="comment">% 注意：BIBTEX 程序在生成参考文献列表的时候，通常只列出用了 \cite 命令引用的那些。</span></span><br><span class="line"><span class="comment">% \nocite{⟨citation⟩} 命令可以列出未被引用的文献</span></span><br><span class="line"><span class="keyword">\bibliography</span>{ref} </span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>{document}</span><br><span class="line"><span class="comment">% 此后内容会被忽略</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="第三种使用-biblatex-宏包组织参考文献">第三种：使用 biblatex 宏包组织参考文献</h1>
+<p>biblatex 宏包组织参考文献的思路于 <span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 大致相同，主要区别如下：</p>
+<ul>
+<li>biblatex 宏包将文献数据的导入和生成参考文献列表分成了两步
+<ul>
+<li><code>\addbibresource{ref.bib}</code> 导入文献数据；</li>
+<li><code>\printbibliography</code> 生成参考文献列表；</li>
+</ul></li>
+<li>biblatex 宏包在导入时通过 <code>⟨key⟩ = ⟨value⟩</code> 形式进行一些内容的设定，包括
+<ul>
+<li>参考文献样式 <code>style</code>，在 biblatex 宏包样式又被细分为著录样式和引用样式
+<ul>
+<li><p>可以统一进行设定：</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\usepackage</span>[style=gb7714-2015]{biblatex}</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>也可以分别进行设定： </p><figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\usepackage</span>[bibstyle=gb7714-2015,citestyle=authoryear]{biblatex}</span><br></pre></td></tr></tbody></table></figure><p></p></li>
+</ul></li>
+<li>参考文献著录排序的规则 <code>sorting</code></li>
+</ul></li>
+<li>biblatex 宏包在正文中引用参考文献的形式更丰富，除了使用 <code>\cite</code> 之外，还可以使用
+<ul>
+<li><code>\citeauthor</code> 单独引用作者；</li>
+<li><code>\citeyear</code> 单独引用年份；</li>
+</ul></li>
+<li>编译方式不同，biblatex 宏包使用 biber 程序处理参考文献，而 <span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 使用 bibtex 程序
+<ul>
+<li><span class="math inline">\(\mathrm{B\scriptstyle{IB}}\TeX\)</span> 编译过程：xelatex -&gt; bibtex -&gt; xelatex*2</li>
+<li>biblatex 宏包编译过程：xelatex -&gt; biber -&gt; xelatex*2</li>
+</ul></li>
+</ul>
+<p>具体实践：</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>{article}</span><br><span class="line"><span class="comment">% 导言区</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% 使用符合 GB/T 7714-2015 规范的参考文献样式</span></span><br><span class="line"><span class="keyword">\usepackage</span>[style=gb7714-2015]{biblatex}</span><br><span class="line"><span class="comment">% 导入文献数据文件，包括了文件的扩展名</span></span><br><span class="line"><span class="keyword">\addbibresource</span>{ref.bib}</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>{document}</span><br><span class="line"><span class="comment">% 正文内容</span></span><br><span class="line"><span class="keyword">\section</span>{Some words}</span><br><span class="line">This is a example <span class="keyword">\cite</span>{citation1}.</span><br><span class="line">······</span><br><span class="line"></span><br><span class="line"><span class="comment">% 利用 \addbibresource 导入的数据以及导入 biblatex 宏包时设置的样式，生成参考文献列表</span></span><br><span class="line"><span class="comment">% 注意：biber 程序在生成参考文献列表的时候，通常只列出用了 \cite 命令引用的那些。</span></span><br><span class="line"><span class="comment">% \nocite{⟨citation⟩} 命令可以列出未被引用的文献</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">\printbibliography</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>{document}</span><br><span class="line"><span class="comment">% 此后内容会被忽略</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="参考文献">参考文献</h1>
+<div id="refer-anchor">
+
+</div>
+<ul>
+<li><p>[1] <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/CTAN/biblio/bibtex/base/btxdoc.pdf">所有类别的文献条目格式的参考文档</a></p></li>
+<li><p>[2]<a target="_blank" rel="noopener" href="https://texdoc.org/serve/lshort-zh-cn.pdf/0">一份不太简短的LATEX2ε 介绍</a></p></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/WeChat_pay.jpg" alt="Borne 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>原作者： </strong>Yao.Born
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E7%94%A8Latex%E7%BB%84%E7%BB%87%E6%96%87%E7%8C%AE/" title="如何用Latex组织文献?">https://yapwn.com/archives/如何用Latex组织文献/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.zhihu.com/people/jiang-yang-46-25">
+            <span class="icon">
+              <i class="fab fa-zhihu"></i>
+            </span>
+
+            <span class="label">Zhihu</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzkyMTMzODA0MQ==#wechat_redirect">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/LaTeX/" rel="tag"><i class="fa fa-tag"></i> LaTeX</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/archives/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1%EF%BC%9F/" rel="prev" title="如何理解极大似然估计？">
+                  <i class="fa fa-angle-left"></i> 如何理解极大似然估计？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/archives/MIT-GNU-Scheme-%E5%AE%89%E8%A3%85/" rel="next" title="Windows 下 MIT/GNU Scheme 安装">
+                  Windows 下 MIT/GNU Scheme 安装 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-twikoo">twikoo</a></li>
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane twikoo" id="comment-twikoo">
+              <div class="comments"><div id="twikoo-comments"></div></div>
+            </div>
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments gitalk-container"></div>
+            </div>
+        </div>
+      </div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Borne</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">34k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">31 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/Yapwn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="twikoo" type="application/json">{"enable":true,"visitor":false,"envId":"https://yapwn.zeabur.app","el":"#twikoo-comments"}</script>
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.twikoo.el)
+    .then(() => NexT.utils.getScript(
+      CONFIG.twikoo.jsUrl || 'https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js',
+      { condition: window.twikoo }
+    ))
+    .then(() => {
+      twikoo.init(CONFIG.twikoo);
+    });
+});
+</script>
+<style>
+.post-block, .comments {
+  overflow: visible;
+}
+.tk-owo-emotion {
+  display: inline-block;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Yapwn","repo":"blog-comments","client_id":"48c4d76c268dd62f2158","client_secret":"caf0a2e7100275f20b10c6d9cd5291e3e1970d0f","admin_user":"Yapwn","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"57a5d977c630924344f4537e7977ff16"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

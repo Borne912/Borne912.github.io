@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7CLobster+Two:300,300italic,400,400italic,700,700italic%7CAmita:300,300italic,400,400italic,700,700italic%7CRoboto+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/orange/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yapwn.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1 背景 最近，和朋友一起玩mc，因为使用各种软件进行连接的效果都不是很理想，所以就想着干脆自己搭建一个mc的服务器，一是为了能够和朋友更方便和快乐的进行玩耍，二是正好借此机会检验一下自己的技术。 搭建mc服务器前面大部分的过程都十分顺利，一直到了最后一步，需要开启服务器的一个端口，向外部提供服务，无论怎么弄外部都无法对开启的端口进行访问（当时觉得十分纳闷服务器的端口分明就打开了呀？为什么外部就是">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="如何开启服务器的自定义端口？">
+<meta property="og:url" content="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3%EF%BC%9F/">
+<meta property="og:site_name" content="Meditations">
+<meta property="og:description" content="1 背景 最近，和朋友一起玩mc，因为使用各种软件进行连接的效果都不是很理想，所以就想着干脆自己搭建一个mc的服务器，一是为了能够和朋友更方便和快乐的进行玩耍，二是正好借此机会检验一下自己的技术。 搭建mc服务器前面大部分的过程都十分顺利，一直到了最后一步，需要开启服务器的一个端口，向外部提供服务，无论怎么弄外部都无法对开启的端口进行访问（当时觉得十分纳闷服务器的端口分明就打开了呀？为什么外部就是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Yapwn/BlogDataBase/master/Obsidianimage-20220822141032700.png">
+<meta property="article:published_time" content="2022-08-22T02:20:53.000Z">
+<meta property="article:modified_time" content="2023-11-02T14:16:02.443Z">
+<meta property="article:author" content="Borne">
+<meta property="article:tag" content="nmap">
+<meta property="article:tag" content="netstat">
+<meta property="article:tag" content="firewall-cmd">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Yapwn/BlogDataBase/master/Obsidianimage-20220822141032700.png">
+
+
+<link rel="canonical" href="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3%EF%BC%9F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3%EF%BC%9F/","path":"archives/如何开启服务器的自定义端口？/","title":"如何开启服务器的自定义端口？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何开启服务器的自定义端口？ | Meditations</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Meditations" type="application/atom+xml">
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Meditations</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Work Hard, Have Fun!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-rss"><a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a></li><li class="menu-item menu-item-commonweal"><a href="/404" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D"><span class="nav-text">2 开始之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E6%96%87%E9%83%A8%E5%88%86"><span class="nav-text">3 正文部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99firewall"><span class="nav-text">3.1 防火墙（firewall）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E9%98%B2%E7%81%AB%E5%A2%99%E7%8A%B6%E6%80%81"><span class="nav-text">3.1.1 检测防火墙状态</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E7%AB%AF%E5%8F%A3"><span class="nav-text">3.1.2 开启端口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%85%BE%E8%AE%AF%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A7%E5%88%B6%E5%8F%B0"><span class="nav-text">3.2 腾讯云服务器控制台</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%AB%AF%E5%8F%A3%E5%AF%B9%E5%BA%94%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="nav-text">3.3 启动端口对应的服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E7%AB%AF%E5%8F%A3%E5%90%AF%E5%8A%A8%E6%83%85%E5%86%B5"><span class="nav-text">3.4 检测端口启动情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">4 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Borne"
+      src="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241255768.PNG">
+  <p class="site-author-name" itemprop="name">Borne</p>
+  <div class="site-description" itemprop="description">Sharing my Life, Work, Technique and Sentiment!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Yapwn" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Yapwn" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:Born.Yao@gmail.com" title="E-Mail → mailto:Born.Yao@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/jiang-yang-46-25" title="Zhihu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;jiang-yang-46-25" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://t.me/Yapoown" title="Telegram → https:&#x2F;&#x2F;t.me&#x2F;Yapoown" rel="noopener me" target="_blank"><i class="fa-brands fa-telegram fa-fw"></i>Telegram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E6%A0%87%E5%87%86%E8%89%B2%E7%89%88.png" title="WeChat → https:&#x2F;&#x2F;raw.githubusercontents.com&#x2F;Yapwn&#x2F;BlogDataBase&#x2F;master&#x2F;%E6%89%AB%E7%A0%81_%E6%90%9C%E7%B4%A2%E8%81%94%E5%90%88%E4%BC%A0%E6%92%AD%E6%A0%B7%E5%BC%8F-%E6%A0%87%E5%87%86%E8%89%B2%E7%89%88.png" rel="noopener me" target="_blank"><i class="fa-brands fa-weixin fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/93744433" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;93744433" rel="noopener me" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/Obsidian202308241255768.PNG">
+      <meta itemprop="name" content="Borne">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meditations">
+      <meta itemprop="description" content="Sharing my Life, Work, Technique and Sentiment!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何开启服务器的自定义端口？ | Meditations">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何开启服务器的自定义端口？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-22 10:20:53" itemprop="dateCreated datePublished" datetime="2022-08-22T10:20:53+08:00">2022-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-02 22:16:02" itemprop="dateModified" datetime="2023-11-02T22:16:02+08:00">2023-11-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">服务器</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="背景">1 背景</h3>
+<p>最近，和朋友一起玩mc，因为使用各种软件进行连接的效果都不是很理想，所以就想着干脆自己搭建一个mc的服务器，一是为了能够和朋友更方便和快乐的进行玩耍，二是正好借此机会检验一下自己的技术。</p>
+<p>搭建mc服务器前面大部分的过程都十分顺利，一直到了最后一步，需要开启服务器的一个端口，向外部提供服务，无论怎么弄外部都无法对开启的端口进行访问（当时觉得十分纳闷服务器的端口分明就打开了呀？为什么外部就是无法访问呢？一度以为又是玄学），最后经过几个小时的“耐心”折腾终于解决了这个问题。</p>
+<p>写这篇文章的目的就是为了记录开启服务器的一个自定义的端口，并能够让外部成功访问的一整个流程，因为在解决这个问题的过程中也在网上查找了大量的资料，发现很多朋友也和我遇到了同样的问题，但是网上都没有给出一个较为有效的解决方案，希望这篇文章能够帮助到有同样困惑的朋友们。</p>
+<span id="more"></span>
+<h3 id="开始之前">2 开始之前</h3>
+<p>在文章开始之间先介绍一下这篇文章后续内容用到的一些工具以及相应的版本号：</p>
+<ul>
+<li><p>服务器（腾讯云：轻量应用服务器 CPU: 2核 内存: 2GB）</p></li>
+<li><p><strong>操作系统</strong>（CentOS Linux release 7.6.1810 (Core)）</p></li>
+</ul>
+<p>需要重点关注的是所使用的操作系统以及相应的版本号，因为对于不同的操作系统，或者相同操作系统的不同版本，可能对于后面要介绍的一些方法会存在较大的差别，所以需要特别关注。但是好在不管用的工具是什么，方法的思路是相同的，只要掌握了方法思路，工具仅仅就是工具而已。</p>
+<h3 id="正文部分">3 正文部分</h3>
+<p>下面，正式开始进入这篇文章的主题，</p>
+<h4 id="防火墙firewall">3.1 防火墙（firewall）</h4>
+<p>想要开放服务器的指定端口，需要借助于服务器的防火墙。</p>
+<h5 id="检测防火墙状态">3.1.1 检测防火墙状态</h5>
+<p>首先需要确定的是当前服务器防火墙的状态，如果服务器的防火墙是关闭的，需要将它打开。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status firewalld.service</span><br></pre></td></tr></tbody></table></figure>
+<p>如果提示<code>Active: active (running)</code>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">● firewalld.service - firewalld - dynamic firewall daemon</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; disabled; vendor preset: enabled)</span><br><span class="line">   Active: active (running) since 六 2022-08-20 23:26:33 CST; 1 day 11h ago</span><br><span class="line">     Docs: man:firewalld(1)</span><br><span class="line"> Main PID: 6979 (firewalld)</span><br><span class="line">   CGroup: /system.slice/firewalld.service</span><br><span class="line">           └─6979 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid</span><br></pre></td></tr></tbody></table></figure>
+<p>说明服务器防火墙正常运行，那么就直接进行下一步。</p>
+<p>如果提示<code>Active: inactive (dead)</code>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">● firewalld.service - firewalld - dynamic firewall daemon</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; disabled; vendor preset: enabled)</span><br><span class="line">   Active: inactive (dead)</span><br><span class="line">     Docs: man:firewalld(1)</span><br></pre></td></tr></tbody></table></figure>
+<p>说明服务器防火墙处于关闭状态，那么需要开启服务器：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start firewalld.service</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="开启端口">3.1.2 开启端口</h5>
+<p>通过ssh进入服务器，借助于服务器的防火墙的<strong>命令行客户端（firewall-cmd）</strong>，可以开启服务器的指定端口。</p>
+<p>下面以<strong>端口（2345）</strong>为例进行演示：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=2345/tcp --permanent</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>--zone=public：设置操作区域为public</li>
+<li>--add-port：启用2345端口的TCP协议组合</li>
+<li>--permanent：携带该参数表示永久配置，否则表示运行时配置</li>
+</ul>
+<p><strong>永久</strong>开启某个端口，需要重启防火墙才能让配置生效：</p>
+<p>可以使用防火墙的<strong>命令行客户端（firewall-cmd）</strong>，重新加载防火墙规则并保存状态信息。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --reload</span><br></pre></td></tr></tbody></table></figure>
+<p>也可以使用systemd工具<strong>systemctl</strong>，重启防火墙</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart firewalld.service</span><br></pre></td></tr></tbody></table></figure>
+<p>接着，检查<strong>端口（2345）</strong>是否被成功开启：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --query-port=2345/tcp --permanent</span><br></pre></td></tr></tbody></table></figure>
+<p>如果，显示是<code>yes</code>说明<strong>端口（2345）</strong>被成功开启，否则，说明开启失败。</p>
+<h4 id="腾讯云服务器控制台">3.2 腾讯云服务器控制台</h4>
+<p>由于本文使用的是腾讯云的轻量应用服务器，所以除了通过上面的方式开启服务器的端口之外，还需要在腾讯云提供的控制台上开启<strong>相应的端口（2345）</strong>，具体设置如下：</p>
+<figure>
+<img data-src="https://raw.githubusercontent.com/Yapwn/BlogDataBase/master/Obsidianimage-20220822141032700.png" alt="image-20220822141032700"><figcaption aria-hidden="true">image-20220822141032700</figcaption>
+</figure>
+<h4 id="启动端口对应的服务">3.3 启动端口对应的服务</h4>
+<p>网上很多“教如何开启服务器端口”的教程都是到了3.2节就戛然而止了。</p>
+<p>你说这样有问题吗？其实没有太大问题，因为“懂得人都懂”。</p>
+<p>但是很多人就以为完成了3.2这一步之后就已经算是成功开启端口了（在之前我也是这样认为的），外部就可以对端口进行正常访问了。</p>
+<p>可是实际上只完成3.2这一步，外部并不能正常访问端口，因为想要让外部能正常访问，还需要启动端口所对应的服务，即：要有程序对端口进行监听，这样当外部对端口进行访问时，监听该端口的程序才能做出正常的反馈。</p>
+<p>就拿搭建的mc服务器来说，需要启动mc服务器程序去监听前面打开的<strong>端口（2345）</strong>，启动程序之后，通过<code>netstat</code>指令：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-16-11-centos MineCraft]<span class="comment"># netstat -tunlp</span></span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name</span><br><span class="line">tcp6       0      0 :::2345                 :::*                    LISTEN      17954/java</span><br></pre></td></tr></tbody></table></figure>
+<p>可以查询端口和监听该端口所对应的程序，可以看到<strong>端口（2345）</strong>目前已经被PID为17954的java程序所监听。</p>
+<p>到这一步，才算成功开启了服务器的<strong>端口（2345）</strong>，并能够供外部进行正常的访问。</p>
+<h4 id="检测端口启动情况">3.4 检测端口启动情况</h4>
+<p>可以在本地通过<strong>网络探测工具（nmap）</strong>，去检测服务器相应端口的启动情况：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -Pn IP地址 -p 端口号</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li><code>-Pn</code>:禁用主机检测</li>
+<li><code>-p</code>:指定端口号</li>
+</ul>
+<p>如果显示<strong>端口状态（STATE）</strong>为<code>open</code>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Starting Nmap 7.92 ( https://nmap.org ) at 2022-08-22 12:09 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 124.223.166.235</span><br><span class="line">Host is up (0.050s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE</span><br><span class="line">2345/tcp open  dbm</span><br></pre></td></tr></tbody></table></figure>
+<p>则说明服务器的<strong>端口（2345）</strong>已经成功开启。</p>
+<h3 id="总结">4 总结</h3>
+<p>简单总结一下，其实现在回过头来冷静地、仔细地想，网上很多“教授开放服务器端口”的教程为什么到3.2节就结束也是有道理的。</p>
+<p>因为服务器开放端口的目的就为了给外部提供某种服务，那既然要提供某种服务，自然需要相应的程序去监听和处理，</p>
+<p>所以3.2节开放端口之后，启动端口想要给外部提供服务所对应的程序是一件十分自然的事情（“懂的人都懂”）</p>
+<p>很多写教程的朋友可能都觉得这样事情不需要多提，但是对于小白（像我）可能当时就没有想到这点，惭愧，惭愧唔！</p>
+<h3 id="参考文献">参考文献</h3>
+<p>[1] <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1691072">搞它！！！Linux--深入介绍firewalld防火墙管理工具 - 腾讯云开发者社区-腾讯云</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://raw.githubusercontents.com/Yapwn/BlogDataBase/master/WeChat_pay.jpg" alt="Borne 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>原作者： </strong>Born
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://yapwn.com/archives/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3%EF%BC%9F/" title="如何开启服务器的自定义端口？">https://yapwn.com/archives/如何开启服务器的自定义端口？/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.zhihu.com/people/jiang-yang-46-25">
+            <span class="icon">
+              <i class="fab fa-zhihu"></i>
+            </span>
+
+            <span class="label">Zhihu</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzkyMTMzODA0MQ==#wechat_redirect">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/nmap/" rel="tag"><i class="fa fa-tag"></i> nmap</a>
+              <a href="/tags/netstat/" rel="tag"><i class="fa fa-tag"></i> netstat</a>
+              <a href="/tags/firewall-cmd/" rel="tag"><i class="fa fa-tag"></i> firewall-cmd</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/archives/hexo-%E4%BD%BF%E7%94%A8%E2%80%9C%E6%A0%87%E5%87%86%E5%8C%96%E2%80%9D%E6%B5%81%E7%A8%8B/" rel="prev" title="hexo 使用“标准化”流程">
+                  <i class="fa fa-angle-left"></i> hexo 使用“标准化”流程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/archives/Markdown%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95/" rel="next" title="Markdown常用语法">
+                  Markdown常用语法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-twikoo">twikoo</a></li>
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane twikoo" id="comment-twikoo">
+              <div class="comments"><div id="twikoo-comments"></div></div>
+            </div>
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments gitalk-container"></div>
+            </div>
+        </div>
+      </div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Borne</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">34k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">31 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/Yapwn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '32px',
+  left: 'unset',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+<script class="next-config" data-name="twikoo" type="application/json">{"enable":true,"visitor":false,"envId":"https://yapwn.zeabur.app","el":"#twikoo-comments"}</script>
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.twikoo.el)
+    .then(() => NexT.utils.getScript(
+      CONFIG.twikoo.jsUrl || 'https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js',
+      { condition: window.twikoo }
+    ))
+    .then(() => {
+      twikoo.init(CONFIG.twikoo);
+    });
+});
+</script>
+<style>
+.post-block, .comments {
+  overflow: visible;
+}
+.tk-owo-emotion {
+  display: inline-block;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Yapwn","repo":"blog-comments","client_id":"48c4d76c268dd62f2158","client_secret":"caf0a2e7100275f20b10c6d9cd5291e3e1970d0f","admin_user":"Yapwn","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ffb4421aa05d94015c7233a4430ec364"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
